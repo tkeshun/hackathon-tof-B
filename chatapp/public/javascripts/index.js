@@ -7,6 +7,7 @@ function enter() {
 
     // ユーザ名が未入力でないかチェックする
     if (userName !== ''){
+        socket.emit('enterEvent', userName);
         $('form').submit();
     }else{
         alert("ユーザ名を入力してください");
