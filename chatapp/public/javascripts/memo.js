@@ -8,6 +8,7 @@ function memo() {
     const message = $('#message').val();
     // メモの内容を表示
     $('#thread').prepend('<p>' + userName + 'さんのメモ：' + message + '</p>');
+    $('#message').val('');
 
     return false;
 }
