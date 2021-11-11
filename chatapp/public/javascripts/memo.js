@@ -6,8 +6,8 @@ function memo() {
     const userName = $('#userName').val();
     // 入力されたメッセージを取得
     const message = $('#message').val();
-    // メモの内容を表示
-    if($('#message').val() != ''){
+    // 空白，空行でない時メモの内容を表示
+    if($('#message').val().match(/\S/g)){
         $('#thread').prepend('<p>' + userName + 'さんのメモ：' + message + '</p>');
         $('#message').val('');
     }
