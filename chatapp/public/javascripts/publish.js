@@ -5,7 +5,7 @@ function publish() {
     // ユーザ名を取得
     const userName = $('#userName').val();
     // 入力されたメッセージを取得
-    const message = $('#message').val();
+    const message = $('#message').val().replace(/\r?\n/g, '<br>');
     // 投稿内容を送信
     if (socket.emit('sendMessageEvent', {userName: userName, message: message})) {
         $('#message').val('');
