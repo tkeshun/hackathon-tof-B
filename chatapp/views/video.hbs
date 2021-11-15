@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row">
+        <h1>Node Chat 通話サンプル</h1>
+    </div>
+    <div class="row">
+        <h2>ローカルビデオ</h2>
+        <div>
+            <video id="local" width="320" height="240" muted autoplay></video>
+        </div>
+        <h2>リモートビデオ</h2>
+        <div id="remote">
+        </div>
+        <button onclick="callme();">通話開始</button>
+    </div>
+</div>
+
+<script src="/javascripts/socket.js"></script>
+<script src="/javascripts/index.js"></script>
+<script src="/javascripts/webrtc.js"></script>

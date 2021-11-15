@@ -14,4 +14,8 @@ router.post('/room', function(request, response, next) {
     response.render('room', { userName: request.body.userName});
 });
 
+router.get('/video', function (request, response, next) {
+    response.render('video');
+});
+
 module.exports = router;
