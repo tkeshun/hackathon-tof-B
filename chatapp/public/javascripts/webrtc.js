@@ -9,7 +9,7 @@ let stream;
 })()
 
 // 通話要求を発行する関数
-function callme(){
+function callMe(){
     socket.emit('callme', {});
     console.log("start webrtc");
 }
@@ -51,6 +51,18 @@ function newPeerConnection(socketID){
         document.getElementById('remote').appendChild(remoteVideo);
     };
 
+    pc.onconnectionstatechange = function (e) {
+        switch (pc.connectionState) {
+            case "disconnected":
+                console.log(socketID + " is disconnected");
+                document.getElementById(socketID).remove();
+                break;
+            case "closed":
+                console.log(socketID + " is closed");
+                break;
+        }
+    }
+
     return pc;
 }
 
@@ -61,13 +73,24 @@ function setTrack(track){
     })
 }
 
+// 通話終了
+function endCall(){
+    peerConnectionMap.forEach(pc=>{
+        pc.close();
+    });
+
+    let remoteArea = document.getElementById('remote');
+    let cloneRemote = remoteArea.cloneNode(false);
+    remoteArea.parentNode.replaceChild(cloneRemote, remoteArea);
+}
+
 // 通話要求を受け取った時のハンドラ
 socket.on('callme', async function(data){
     // OfferSDPの送り先を登録
     data.to = data.from;
     // PeerConnectionを生成
     const pc = await newPeerConnection();
-    stream.getTracks.forEach(track => {
+    stream.getTracks().forEach(track => {
         pc.addTrack(track, stream);
     });
 
@@ -75,6 +98,7 @@ socket.on('callme', async function(data){
     peerConnectionMap.set(data.from, pc);
     // OfferSDPを生成
     const localSdp = await pc.createOffer().catch(e => e);
+    pc.setLocalDescription(localSdp);
     data.OfferSDP = localSdp;
 
     socket.emit('sendOfferSDPEvent', data);
@@ -87,13 +111,13 @@ socket.on('receiveOfferSDPEvent', async function(data) {
     
     // PeerConnectionを生成
     const pc = newPeerConnection(data.from);
-    stream.getTracks.forEach(track => {
+    stream.getTracks().forEach(track => {
         pc.addTrack(track, stream);
     });
 
-    peerConnectionMap.set()
+    peerConnectionMap.set(data.from, pc);
     // RemoteSDPを登録
-    await pc.setRemoteDescription(data.sdp);
+    await pc.setRemoteDescription(data.OfferSDP);
     // LocalSDPを生成
     const localSdp = await pc.createAnswer();
     // LocalSDPを登録

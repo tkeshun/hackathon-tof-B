@@ -7,7 +7,15 @@
 
 const app = require('../app');
 const debug = require('debug')('test:server');
-const http = require('http');
+// const http = require('http');
+
+/* https対応 */
+const https = require('https');
+const fs = require('fs');
+const options = {
+  key: fs.readFileSync('./key/private_key.pem'),
+  cert: fs.readFileSync('./key/server.crt')
+}
 
 /**
  * Get port from environment and store in Express.
@@ -20,7 +28,10 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
+
+/* https対応 */
+const server = https.createServer(options, app);
 
 require('../sockets')(server);
 
