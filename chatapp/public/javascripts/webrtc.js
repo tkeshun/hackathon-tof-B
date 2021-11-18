@@ -93,6 +93,7 @@ socket.on('callme', async function(data){
     // PeerConnectionを生成
     const pc = await newPeerConnection(data.from);
     stream.getTracks().forEach(track => {
+        console.log("track: ", track.kind);
         pc.addTrack(track, stream);
     });
 
@@ -114,6 +115,7 @@ socket.on('receiveOfferSDPEvent', async function(data) {
     // PeerConnectionを生成
     const pc = newPeerConnection(data.from);
     stream.getTracks().forEach(track => {
+        console.log("track: ", track.kind);
         pc.addTrack(track, stream);
     });
 
