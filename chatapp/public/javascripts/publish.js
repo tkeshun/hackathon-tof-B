@@ -18,3 +18,9 @@ function publish() {
 socket.on('receiveMessageEvent', function (data) {
     $('#thread').prepend('<p>' + data.userName + 'さん：' + data.message + '</p>');
 });
+
+window.document.onkeydown = function(event){
+    if (event.keyCode === 13) {
+        publish();
+    }
+}
