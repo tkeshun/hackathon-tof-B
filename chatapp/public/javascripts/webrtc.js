@@ -81,6 +81,8 @@ function endCall(){
 
     let remoteArea = document.getElementById('remote');
     let cloneRemote = remoteArea.cloneNode(false);
+    let remoteTitle = document.createElement("h1");
+    remoteTitle.innerText = "リモートビデオ";
     remoteArea.parentNode.replaceChild(cloneRemote, remoteArea);
 }
 
@@ -89,7 +91,7 @@ socket.on('callme', async function(data){
     // OfferSDPの送り先を登録
     data.to = data.from;
     // PeerConnectionを生成
-    const pc = await newPeerConnection();
+    const pc = await newPeerConnection(data.from);
     stream.getTracks().forEach(track => {
         pc.addTrack(track, stream);
     });
@@ -117,7 +119,8 @@ socket.on('receiveOfferSDPEvent', async function(data) {
 
     peerConnectionMap.set(data.from, pc);
     // RemoteSDPを登録
-    await pc.setRemoteDescription(data.OfferSDP);
+    const remoteSDP = new RTCSessionDescription(data.OfferSDP);
+    await pc.setRemoteDescription(remoteSDP).catch((e)=> "setRemoteDescription: "+e);
     // LocalSDPを生成
     const localSdp = await pc.createAnswer();
     // LocalSDPを登録
@@ -133,7 +136,8 @@ socket.on('receiveAnswerSDPEvent', function (data) {
     // 送信元と紐づけられたPeerConnectionを取得
     const pc = peerConnectionMap.get(data.from);
     // 相手のAnswerSDPを登録
-    pc.setRemoteDescription(data.AnswerSDP);
+    const remoteSDP = new RTCSessionDescription(data.AnswerSDP)
+    pc.setRemoteDescription(remoteSDP).catch((e)=> "setRemoteDescription: "+e);
 });
 
 // ICECandidateを受け取った時のハンドラ
@@ -142,5 +146,11 @@ socket.on('receiveICECandidateEvent', function(data){
     const pc = peerConnectionMap.get(data.from);
 
     // 取得したPeerConnectionにICECandidateを登録
-    pc.addIceCandidate(data.ICECandidate);
+    console.log("receiveICECandidate: ", data.ICECandidate);
+    try {
+        const candidate = new RTCIceCandidate(data.ICECandidate);
+        pc.addIceCandidate(candidate);
+    }catch (e){
+        console.log(e);
+    }
 });
