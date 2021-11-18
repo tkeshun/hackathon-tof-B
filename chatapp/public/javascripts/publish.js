@@ -16,7 +16,13 @@ function publish() {
 
 // サーバから受信した投稿メッセージを画面上に表示する
 socket.on('receiveMessageEvent', function (data) {
-    $('#thread').append('<div class="chatBox"><p>' + data.userName + 'さん' + '</p><div class="bot chatBalloon">' + data.message + '</div></div>');
+    // ユーザ名を取得
+    const userName = $('#userName').val();
+    if (data.userName == userName){
+        $('#thread').append('<div class="mychatBox"><p>' + data.userName + 'さん' + '</p><div class="mybot mychatBalloon">' + data.message + '</div></div>');
+    } else {
+        $('#thread').append('<div class="chatBox"><p>' + data.userName + 'さん' + '</p><div class="bot chatBalloon">' + data.message + '</div></div>');
+    }
 });
 
 window.document.onkeydown = function(event){
