@@ -10,7 +10,8 @@ router.get('/', function(request, response, next) {
 
 // チャット画面の表示
 router.post('/room', function(request, response, next) {
-    response.render('room', { userName: request.body.userName});
+    console.log('ユーザ名：' + request.body.userName);
+    response.render('room', { userName: request.body.userName,roomId: request.body.roomId});
 });
 
 module.exports = router;
