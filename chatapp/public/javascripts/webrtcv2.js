@@ -81,7 +81,11 @@ function newPeerConnection(socketId){
             return;
         }
 
-        trackEvent.track.onended = ()
+        trackEvent.track.onmute = () => {
+            console.log("onMute " + socketId);
+            const v = getVideo(socketId);
+            v.srcObject = null;
+        }
 
         const remoteVideo = getVideo(socketId);
         remoteVideo.srcObject = trackEvent.streams[0];
@@ -160,6 +164,10 @@ async function switchStream(){
     }else{
         peerConnectionMap.forEach((pc)=>{
             pc.getSenders().forEach((sender)=>{
+                if (sender.track === null){
+                    return;
+                }
+                sender.track.enabled = false;
                 pc.removeTrack(sender);
             });
         });
