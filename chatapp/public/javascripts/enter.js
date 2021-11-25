@@ -12,3 +12,12 @@ window.addEventListener("load",function(){
 socket.on('enterOtherEvent', function (data) {
     $('#thread').prepend('<p>' +data.userName + 'が入室しました'+ '</p>');
 });
+
+socket.on('ChangeAddUserEvent', function (data){
+    console.log("入りました")
+    let text = ""
+    data.forEach((x, i) => {
+        text +=  x + "<br>";
+    });
+    document.getElementById('in_login_list').innerHTML　= text;
+});

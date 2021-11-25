@@ -15,3 +15,13 @@ function exit() {
 socket.on('exitOtherEvent', function (data) {
     $('#thread').prepend('<p>' +data.userName + 'が退出しました'+ '</p>');
 });
+
+socket.on('ChangeDeleteUserEvent', function (data){
+    console.log("さようなら")
+    console.log(data)
+    let text = ""
+    data.forEach((x, i) => {
+        text +=  x + "<br>";
+    });
+    document.getElementById('in_login_list').innerHTML　= text;
+});
