@@ -8,6 +8,7 @@
     </a>
     <span class="navbar-text" style="font-size : xx-large">
         Room {{roomId}}
+        <input id="roomId" type="hidden" value="{{roomId}}">
     </span>
     <button class="btn btn-outline-danger my-2 my-sm-0" type="button" value="退室する" onclick="exit();">退出する</button>
 </nav>
@@ -32,6 +33,10 @@
                 <div class="room-login_user">
                     ログインユーザ：{{userName}} さん
                     <input id="userName" type="hidden" value="{{userName}}">
+                </div>
+                <div class="in-login_user">
+                    ログイン中ユーザ：
+                    <div id="in_login_list"></div>
                 </div>
                 <div class="room-message">
                     <textarea id="message" rows="4" class="room-message_textarea" placeholder="投稿文を入力してください">
