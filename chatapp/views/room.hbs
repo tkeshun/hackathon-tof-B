@@ -17,6 +17,11 @@
     <div class="row">
         <div class="col-sm-4">
             ビデオ通話表示の場所
+            <div>
+                <button onclick="switchStream();">ミュート</button>
+            </div>
+            <video id="local" playsinline autoplay muted class="mw-100 mh-100 w-100 bg-dark" poster="/assets/video_slash.png"></video>
+            <div id="remote"></div>
         </div>
         <div class="col-sm-8">
             <form method="post" action="/">
@@ -51,3 +56,4 @@
 <script src="/javascripts/publish.js"></script>
 <script src="/javascripts/memo.js"></script>
 <script src="/javascripts/exit.js"></script>
+<script src="/javascripts/webrtcv2.js"></script>

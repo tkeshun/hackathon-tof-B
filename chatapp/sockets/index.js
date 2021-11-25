@@ -17,6 +17,9 @@ module.exports = function (server) {
 
         // 入室モジュールの呼出
         require('./enter')(socket, io, db);
+      
+        // webrtcモジュールの呼び出し
+        require('./webrtc')(socket);
 
         // 退室モジュールの呼出
         require('./exit')(socket, io, db);
