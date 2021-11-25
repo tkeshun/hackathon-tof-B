@@ -3,11 +3,11 @@
 module.exports = function (socket, io, db) {
     // 退室メッセージをクライアントに送信する
     socket.on('exitEvent', function (data) {
-        socket.broadcast.to(data.roomId).emit('exitOtherEvent',data);
+        socket.broadcast.to(data.roomId).emit('exitOtherEvent',data.userName);
         let member = [];
         
         db.serialize(() => {
-            db.each("select * from members where name = ? limit 1", [data], (err, test) => {
+            db.each("select * from members where name = ? limit 1", [data.userName], (err, test) => {
                 console.dir(test);
                 db.run("delete from members where id = ?", test.id);
             });
